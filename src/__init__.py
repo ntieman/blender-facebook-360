@@ -3,11 +3,12 @@ from ui import UI
 bl_info = {
     "name": "Facebook 360",
     "author": "Nicholas Tieman",
-    "version": (0, 0, 1),
+    "version": (0, 0, 2),
     "blender": (2, 78, 0),
     "location": "Rendertab -> Render Panel",
     "description": "Render images ready for Facebook 360.",
-    "category": "Render"
+    "category": "Render",
+    "support": "TESTING"
     }
 
 
