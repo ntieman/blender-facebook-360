@@ -193,6 +193,20 @@ class UI:
             context.window_manager.fileselect_add(self)
             return {'RUNNING_MODAL'}
 
+    class UpdateSettings(bpy.types.Operator):
+        """Update Facebook 360 settings to match constraints"""
+        bl_idname = "export.update_facebook_settings"
+        bl_label = "Update Settings"
+
+        def execute(self, context):
+            context.scene.facebook_360_enabled = True
+            UI.update_settings(context.scene)
+            context.scene.facebook_360_enabled = False
+            return {'FINISHED'}
+
+        def invoke(self, context, event):
+            return self.execute(context)
+
     def __init__(self):
         pass
 
@@ -244,14 +258,15 @@ class UI:
         box.prop(context.scene, 'facebook_360_enforce_aspect_ratio', toggle=False)
         box.prop(context.scene, 'facebook_360_enforce_bounds', toggle=False)
         box.prop(context.scene, 'facebook_360_enforce_camera', toggle=False)
+        box.operator(UI.UpdateSettings.bl_idname, text=UI.UpdateSettings.bl_label)
         box.operator(UI.AddPanoramaXMP.bl_idname, text=UI.AddPanoramaXMP.bl_label)
 
     @staticmethod
     def register():
         bpy.types.Scene.facebook_360_enabled = BoolProperty(
-            name='Format for Facebook 360',
+            name='Enforce Settings',
             default=True,
-            description='')
+            description='Restrict setting choices to the options below')
 
         bpy.types.Scene.facebook_360_enforce_aspect_ratio = BoolProperty(
             name='Enforce Aspect',
@@ -272,6 +287,7 @@ class UI:
         )
 
         bpy.utils.register_class(UI.AddPanoramaXMP)
+        bpy.utils.register_class(UI.UpdateSettings)
 
         bpy.types.RENDER_PT_render.append(UI.facebook_360_UI)
 
@@ -285,6 +301,7 @@ class UI:
         del bpy.types.Scene.facebook_360_enforce_camera
 
         bpy.utils.unregister_class(UI.AddPanoramaXMP)
+        bpy.utils.unregister_class(UI.UpdateSettings)
 
         bpy.types.RENDER_PT_render.remove(UI.facebook_360_UI)
 
@@ -295,11 +312,12 @@ class UI:
 bl_info = {
     "name": "Facebook 360",
     "author": "Nicholas Tieman",
-    "version": (0, 0, 1),
+    "version": (0, 0, 2),
     "blender": (2, 78, 0),
     "location": "Rendertab -> Render Panel",
     "description": "Render images ready for Facebook 360.",
-    "category": "Render"
+    "category": "Render",
+    "support": "TESTING"
     }
 
 
